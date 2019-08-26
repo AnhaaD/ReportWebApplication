@@ -1,0 +1,551 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="Сүлжээний гомдол" />
+  <DataSources>
+    <SqlDataSource Name="CustomSqlQuery" ComponentName="sqlDataSource1">
+      <Connection Name="CallCenter" FromAppConfig="true" />
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>SELECT
+   problemdate,
+   cat2id,
+   cat3id,
+   cat5,
+   uni_callcenter.problem.statusid,
+   uni_callcenter.problemstatus.statusname,
+   CASE
+        WHEN cat2id IN ('84797','19821','12326') THEN 'Mobile сүлжээ'
+        WHEN cat2id IN ('113996') THEN 'Гэр интернет'
+        ELSE NULL
+    END AS sort1,
+    CASE
+        WHEN cat2id IN ('84797') THEN '4G'
+        WHEN cat2id IN ('19821') THEN '3G'
+        WHEN cat2id IN ('12326') THEN '2G'
+        WHEN cat2id IN ('113996') THEN 'GER'
+        WHEN cat2id IN ('169608') THEN 'MAIL'
+        ELSE NULL
+    END AS sort2,
+    CASE
+        WHEN cat2id IN ('84797','19821','12326','113996','169608') THEN 'Нийт'
+        ELSE NULL
+    END AS sort2total,
+    CASE
+        WHEN cat5 LIKE '%Шалгагдаж байна%' THEN 'Шалгагдаж байна'
+        WHEN cat5 LIKE '%Ачааллаас шалтгаалсан%' THEN 'Ачаалал'
+        WHEN cat5 in ('Хамрах хүрээ','Хамрах хүрээ муу') THEN 'Хамрах хүрээ'
+        WHEN cat5 in ('Сүлжээний чанар','Сүлжээний чанар муу') THEN 'Сүлжээний чанар'
+        WHEN cat5 LIKE '%Гэмтэл саатал%' THEN 'Гэмтэл саатал'
+        WHEN cat5 in ('Бусад') THEN 'Бусад'
+        WHEN cat2id = 169608 THEN 'MAIL'
+        ELSE NULL
+    END AS pivotsort
+ FROM
+     UNI_CALLCENTER.problem LEFT
+     JOIN (
+         SELECT
+             ptype.grouppkid,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,3) + 2,instr(tpathid,'&gt;&gt;',1,4) - instr(tpathid,'&gt;&gt;',1,3) - 2) cat2id,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,4) + 2,instr(tpathid,'&gt;&gt;',1,5) - instr(tpathid,'&gt;&gt;',1,4) - 2) cat3id,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,6) + 2,instr(tpath,'&gt;&gt;',1,7) - instr(tpath,'&gt;&gt;',1,6) - 2) cat5
+         FROM
+             (
+                 SELECT
+                     grouppkid,
+                     sys_connect_by_path(groupname,'&gt;&gt;') || '&gt;&gt;' AS tpath,
+                     sys_connect_by_path(grouppkid,'&gt;&gt;') || '&gt;&gt;' AS tpathid
+                 FROM
+                 UNI_CALLCENTER.problemtype
+                 START WITH
+                     parentpkid =-1
+                 CONNECT BY
+                     PRIOR grouppkid = parentpkid
+             ) ptype
+     ) tproblemtype ON problem.grouppkid = tproblemtype.grouppkid
+         LEFT JOIN UNI_CALLCENTER.problemstatus 
+         ON uni_callcenter.problem.statusid = uni_callcenter.problemstatus.statusid
+        WHERE problemdate BETWEEN add_months(sysdate,-2) AND SYSDATE
+        AND
+        cat2id IN (
+        '84797',
+        '19821',
+        '12326',
+        '113996',
+        '169608'
+        )</Sql>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+      <CalculatedFields>
+        <CalculatedField Name="Date1" Expression="Iif([PROBLEMDATE] &gt;= ?beforedate1 And [PROBLEMDATE] &lt;= ?afterdate1, 1, 0)" DataType="Integer" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Date2" Expression="Iif([PROBLEMDATE] &gt;= ?beforedate2 And [PROBLEMDATE] &lt;= ?afterdate2, 1, 0)" DataType="Integer" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="m pie" Expression="Iif([CAT2ID] In ('84797', '19821', '12326'), [PIVOTSORT], [CAT2ID])" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="ger pivot" Expression="Iif([CAT2ID] In ('113996'), [PIVOTSORT], [CAT2ID])" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Reason" Expression="Iif([CAT2ID] In ('84797'), [STATUSNAME], [STATUSNAME])" DataType="Auto" DataMember="CustomSqlQuery" />
+      </CalculatedFields>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="beforedate1" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="start date (last)" />
+    <Parameter Name="afterdate1" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="end date (last)" />
+    <Parameter Name="beforedate2" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="start date" />
+    <Parameter Name="afterdate2" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="end date" />
+  </Parameters>
+  <Items>
+    <Chart ComponentName="chartDashboardItem1" Name="Chart 1" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not(IsNullOrEmpty([DataItem2]))">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Dimension DataMember="SORT2TOTAL" DefaultId="DataItem2" />
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem2" Name="Chart 2" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not(IsNullOrEmpty([DataItem2]))">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="SORT2" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Pie ComponentName="pieDashboardItem2" Name="Pies 2" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; 'MAIL'" PieType="Donut">
+      <DataItems>
+        <Measure DataMember="Date2" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="PIVOTSORT" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Pie ComponentName="pieDashboardItem3" Name="Pies 3" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not IsNullOrEmpty([DataItem1])" PieType="Donut">
+      <DataItems>
+        <Measure DataMember="Date2" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="SORT1" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Pivot ComponentName="pivotDashboardItem2" Name="Pivot 2" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not(IsNullOrEmpty([DataItem1]))">
+      <DataItems>
+        <Dimension DataMember="PIVOTSORT" DefaultId="DataItem1" />
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+      </DataItems>
+      <Columns>
+        <Column DefaultId="DataItem1" />
+      </Columns>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pivot>
+    <Pie ComponentName="pieDashboardItem1" Name="Pies 1" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; '113996' And [DataItem1] &lt;&gt; '169608'" PieType="Donut">
+      <DataItems>
+        <Measure DataMember="Date1" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="m pie" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Pivot ComponentName="pivotDashboardItem1" Name="Pivot 1" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; '12326' And [DataItem1] &lt;&gt; '169608' And [DataItem1] &lt;&gt; '19821' And [DataItem1] &lt;&gt; '84797'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Dimension DataMember="ger pivot" DefaultId="DataItem1" />
+      </DataItems>
+      <Columns>
+        <Column DefaultId="DataItem1" />
+      </Columns>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pivot>
+    <Pie ComponentName="pieDashboardItem4" Name="Pies 4" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; '12326' And [DataItem1] &lt;&gt; '169608' And [DataItem1] &lt;&gt; '19821' And [DataItem1] &lt;&gt; '84797'" PieType="Donut">
+      <DataItems>
+        <Measure DataMember="Date1" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="ger pivot" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Pivot ComponentName="pivotDashboardItem3" Name="Pivot 3" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="STATUSNAME" DefaultId="DataItem2" />
+        <Dimension DataMember="PIVOTSORT" DefaultId="DataItem1" />
+      </DataItems>
+      <Columns>
+        <Column DefaultId="DataItem2" />
+      </Columns>
+      <Rows>
+        <Row DefaultId="DataItem1" />
+      </Rows>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pivot>
+    <Pie ComponentName="pieDashboardItem7" Name="Pies 7" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; '113996' And [DataItem1] &lt;&gt; '169608'" PieType="Donut">
+      <DataItems>
+        <Measure DataMember="Date2" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="m pie" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Pivot ComponentName="pivotDashboardItem4" Name="Pivot 4" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; '113996' And [DataItem1] &lt;&gt; '169608'">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="m pie" DefaultId="DataItem1" />
+      </DataItems>
+      <Columns>
+        <Column DefaultId="DataItem1" />
+      </Columns>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pivot>
+    <Pivot ComponentName="pivotDashboardItem6" Name="Pivot 6" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; '12326' And [DataItem1] &lt;&gt; '169608' And [DataItem1] &lt;&gt; '19821' And [DataItem1] &lt;&gt; '84797'">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="ger pivot" DefaultId="DataItem1" />
+      </DataItems>
+      <Columns>
+        <Column DefaultId="DataItem1" />
+      </Columns>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pivot>
+    <Pie ComponentName="pieDashboardItem6" Name="Pies 6" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; '12326' And [DataItem1] &lt;&gt; '169608' And [DataItem1] &lt;&gt; '19821' And [DataItem1] &lt;&gt; '84797'" PieType="Donut">
+      <DataItems>
+        <Measure DataMember="Date2" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="ger pivot" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+  </Items>
+  <Groups>
+    <Group ComponentName="groupDashboardItem1" Name="Group 1" ShowCaption="false" />
+    <Group ComponentName="groupDashboardItem2" Name="Group 2" />
+  </Groups>
+  <ColorScheme>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-11499076">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT1" />
+          <Value Type="System.String" Value="Mobile сүлжээ" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-6833696">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT1" />
+          <Value Type="System.String" Value="Гэр интернет" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-4929561">
+      <MeasureKey>
+        <Definition DataMember="Date1" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12291388">
+      <MeasureKey>
+        <Definition DataMember="Date2" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-10773547">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="CAT5" />
+          <Value Type="System.String" Value="Гэмтэл саатал" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-9392825">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="CAT5" />
+          <Value Type="System.String" Value="Бусад" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-1213135">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="CAT5" />
+          <Value Type="System.String" Value="Ачааллаас шалтгаалсан" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12291388">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="CAT5" />
+          <Value Type="System.String" Value="Шалгагдаж байна " />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-5855578">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="CAT5" />
+          <Value Type="System.String" Value="Хамрах хүрээ муу" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-10773547">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="PIVOTSORT" />
+          <Value Type="System.String" Value="Гэмтэл саатал" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-9392825">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="PIVOTSORT" />
+          <Value Type="System.String" Value="Бусад" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-1213135">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="PIVOTSORT" />
+          <Value Type="System.String" Value="Ачаалал" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-5921371">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="PIVOTSORT" />
+          <Value Type="System.String" Value="Хамрах хүрээ" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-13546114">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="PIVOTSORT" />
+          <Value Type="System.String" Value="Шалгагдаж байна" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12291388">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="PIVOTSORT" />
+          <Value Type="System.String" Value="Сүлжээний чанар" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-10773547">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pivot" />
+          <Value Type="System.String" Value="Гэмтэл саатал" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-5921371">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pivot" />
+          <Value Type="System.String" Value="Хамрах хүрээ" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-9392825">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pivot" />
+          <Value Type="System.String" Value="Бусад" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-6833696">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pivot" />
+          <Value Type="System.String" Value="Сүлжээний чанар" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-13546114">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pivot" />
+          <Value Type="System.String" Value="Шалгагдаж байна" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-10773547">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pie" />
+          <Value Type="System.String" Value="Гэмтэл саатал" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-9392825">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pie" />
+          <Value Type="System.String" Value="Бусад" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-5921371">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pie" />
+          <Value Type="System.String" Value="Хамрах хүрээ" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-6833696">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pie" />
+          <Value Type="System.String" Value="Сүлжээний чанар" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-13546114">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pie" />
+          <Value Type="System.String" Value="Шалгагдаж байна" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-1213135">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="m pie" />
+          <Value Type="System.String" Value="Ачаалал" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-10773547">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ger pivot" />
+          <Value Type="System.String" Value="Гэмтэл саатал" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-6833696">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ger pivot" />
+          <Value Type="System.String" Value="Сүлжээний чанар" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-13546114">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ger pivot" />
+          <Value Type="System.String" Value="Шалгагдаж байна" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-5921371">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ger pivot" />
+          <Value Type="System.String" Value="Хамрах хүрээ" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+  </ColorScheme>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical">
+        <LayoutGroup DashboardItem="groupDashboardItem2" Weight="1.0597004498788636">
+          <LayoutItem DashboardItem="pieDashboardItem3" Weight="1.0336511497476164" />
+          <LayoutItem DashboardItem="chartDashboardItem1" Weight="0.44069099760442315" />
+          <LayoutItem DashboardItem="chartDashboardItem2" Weight="1.4000268935901925" />
+          <LayoutItem DashboardItem="pieDashboardItem2" Weight="1.1256309590577673" />
+        </LayoutGroup>
+        <LayoutGroup DashboardItem="groupDashboardItem1" Weight="1.3835098406305519">
+          <LayoutGroup Orientation="Vertical" Weight="1.3193002905599922">
+            <LayoutItem DashboardItem="pivotDashboardItem2" Weight="0.97237154771894185" />
+            <LayoutItem DashboardItem="pivotDashboardItem4" Weight="0.88531113679414331" />
+            <LayoutGroup Weight="2.3653933143131618">
+              <LayoutItem DashboardItem="pieDashboardItem1" Weight="2.3931350293076608" />
+              <LayoutItem DashboardItem="pieDashboardItem7" Weight="2.5117724211682595" />
+            </LayoutGroup>
+          </LayoutGroup>
+          <LayoutGroup Orientation="Vertical" Weight="1.4301027602455123">
+            <LayoutGroup Orientation="Vertical" Weight="1.8180235479858471">
+              <LayoutItem DashboardItem="pivotDashboardItem1" Weight="2.2971398881400074" />
+              <LayoutItem DashboardItem="pivotDashboardItem6" Weight="2.05377420460699" />
+            </LayoutGroup>
+            <LayoutGroup Weight="2.31182702988126">
+              <LayoutItem DashboardItem="pieDashboardItem4" Weight="1.1561171285116203" />
+              <LayoutItem DashboardItem="pieDashboardItem6" Weight="1.1915092394406122" />
+            </LayoutGroup>
+          </LayoutGroup>
+          <LayoutItem DashboardItem="pivotDashboardItem3" Weight="1.0780015981459465" />
+        </LayoutGroup>
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

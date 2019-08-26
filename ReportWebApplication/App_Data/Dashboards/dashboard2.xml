@@ -1,0 +1,428 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="Сүлжээний чанар, бусад төрлийн гомдол" />
+  <DataSources>
+    <SqlDataSource Name="CustomSqlQuery" ComponentName="sqlDataSource1">
+      <Connection Name="CallCenter" FromAppConfig="true" />
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>SELECT 
+   problemdate,
+   cat2id,
+   cat2,
+   cat3id,
+   cat5id,
+   cat5,
+   uni_callcenter.problem.statusid,
+   uni_callcenter.problemstatus.statusname
+  FROM
+     UNI_CALLCENTER.problem 
+     LEFT JOIN (
+         SELECT
+             ptype.grouppkid,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,3) + 2,instr(tpath,'&gt;&gt;',1,4) - instr(tpath,'&gt;&gt;',1,3) - 2) cat2,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,3) + 2,instr(tpathid,'&gt;&gt;',1,4) - instr(tpathid,'&gt;&gt;',1,3) - 2) cat2id,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,4) + 2,instr(tpathid,'&gt;&gt;',1,5) - instr(tpathid,'&gt;&gt;',1,4) - 2) cat3id,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,6) + 2,instr(tpath,'&gt;&gt;',1,7) - instr(tpath,'&gt;&gt;',1,6) - 2) cat5,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,6) + 2,instr(tpathid,'&gt;&gt;',1,7) - instr(tpathid,'&gt;&gt;',1,6) - 2) cat5id
+         FROM
+             (
+                 SELECT
+                     grouppkid,
+                     sys_connect_by_path(groupname,'&gt;&gt;') || '&gt;&gt;' AS tpath,
+                     sys_connect_by_path(grouppkid,'&gt;&gt;') || '&gt;&gt;' AS tpathid
+                 FROM
+                 UNI_CALLCENTER.problemtype
+                 START WITH
+                     parentpkid =-1
+                 CONNECT BY
+                     PRIOR grouppkid = parentpkid
+             ) ptype
+     ) 
+     tproblemtype ON problem.grouppkid = tproblemtype.grouppkid
+      LEFT JOIN UNI_CALLCENTER.problemstatus 
+      ON uni_callcenter.problem.statusid = uni_callcenter.problemstatus.statusid
+       WHERE problemdate BETWEEN add_months(sysdate,-2) AND SYSDATE  
+        AND
+        cat2id IN (
+        '84797',
+        '19821',
+        '12326',
+        '113996'
+        )</Sql>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+      <CalculatedFields>
+        <CalculatedField Name="Date1" Expression="Iif([PROBLEMDATE] &gt;= ?beforedate1 And [PROBLEMDATE] &lt;= ?afterdate1, 1, 0)" DataType="Integer" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Date2" Expression="Iif([PROBLEMDATE] &gt;= ?beforedate2 And [PROBLEMDATE] &lt;= ?afterdate2, 1, 0)" DataType="Integer" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Quality status" Expression="Iif([CAT5] In ('Сүлжээний чанар муу', 'Сүлжээний чанар'), [STATUSNAME], 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Calculated Field 1" Expression="Iif([CAT5] In ('Сүлжээний чанар муу', 'Сүлжээний чанар'), 'Нийт', 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Quality total" Expression="Iif([CAT5] In ('Сүлжээний чанар муу', 'Сүлжээний чанар'), 'Сүлжээний чанар', 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Network filter" Expression="Iif([CAT2ID] In ('84797', '19821', '12326', '113996') And [CAT5] In ('Сүлжээний чанар муу', 'Сүлжээний чанар'), Iif([CAT2ID] In ('113996'), 'GER', [CAT2]), 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Network filter total" Expression="Iif([CAT2ID] In ('84797', '19821', '12326', '113996') And [CAT5] In ('Сүлжээний чанар муу', 'Сүлжээний чанар'), 'Нийт', 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Network total" Expression="Iif([CAT2ID] In ('84797', '19821', '12326', '113996'), 'Нийт гомдол', 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="other status" Expression="Iif([CAT5] In ('Бусад'), [STATUSNAME], 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Date3" Expression="Iif([PROBLEMDATE] &gt;= ?beforedate2 And [PROBLEMDATE] &lt;= ?afterdate2, 1, 0)" DataType="Integer" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="network other total" Expression="Iif([CAT5] In ('Бусад'), 'Нийт', 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="network other filter" Expression="Iif([CAT5] In ('Бусад'), Iif([CAT2ID] In ('113996'), 'GER', [CAT2]), 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="network other filter total" Expression="Iif([CAT5] In ('Бусад'), 'Нийт', 'no')" DataType="Auto" DataMember="CustomSqlQuery" />
+      </CalculatedFields>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="beforedate1" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="start date (last)" />
+    <Parameter Name="afterdate1" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="end date (last)" />
+    <Parameter Name="beforedate2" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="start date" />
+    <Parameter Name="afterdate2" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="end date" />
+  </Parameters>
+  <Items>
+    <Chart ComponentName="chartDashboardItem2" Name="Chart 2" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="Network total" DefaultId="DataItem0" />
+        <Dimension DataMember="Network total" DefaultId="DataItem2" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem2" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem0" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem4" Name="Chart 4" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem0] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem1" />
+        <Measure DataMember="Date2" DefaultId="DataItem2" />
+        <Dimension DataMember="Network filter" DefaultId="DataItem0" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem0" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem2" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem3" Name="Chart 3" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem2] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="Quality status" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem5" Name="Chart 5" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem2] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="Calculated Field 1" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem6" Name="Chart 6" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="Quality total" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem1" Name="Chart 1" ShowCaption="false" ParentContainer="groupDashboardItem2" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem2] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="Network filter total" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem7" Name="Chart 7" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem2] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date3" DefaultId="DataItem1" />
+        <Dimension DataMember="network other filter total" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem8" Name="Chart 8" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem2] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Dimension DataMember="other status" DefaultId="DataItem2" />
+        <Measure DataMember="Date3" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem9" Name="Chart 9" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] = 'Бусад'">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="CAT5" DefaultId="DataItem1" />
+        <Dimension DataMember="CAT5" DefaultId="DataItem2" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem2" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem10" Name="Chart 10" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="Network total" DefaultId="DataItem1" />
+        <Dimension DataMember="Network total" DefaultId="DataItem2" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem2" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem11" Name="Chart 11" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem2] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date3" DefaultId="DataItem1" />
+        <Dimension DataMember="network other total" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem12" Name="Chart 12" ShowCaption="false" ParentContainer="groupDashboardItem1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem2] &lt;&gt; 'no'">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date3" DefaultId="DataItem1" />
+        <Dimension DataMember="network other filter" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+  </Items>
+  <Groups>
+    <Group ComponentName="groupDashboardItem1" Name="Сүлжээний бусад төрлийн гомдол" />
+    <Group ComponentName="groupDashboardItem2" Name="Сүлжээний чанартай холбоотой гомдол" />
+    <Group ComponentName="groupDashboardItem3" Name="Group 3" />
+  </Groups>
+  <ColorScheme>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <MeasureKey>
+        <Definition DataMember="Date1" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-5921371">
+      <MeasureKey>
+        <Definition DataMember="Date2" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Network total" />
+          <Value Type="System.String" Value="Нийт" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-1213135">
+      <MeasureKey>
+        <Definition DataMember="Date3" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-1213135">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="CAT5" />
+          <Value Type="System.String" Value="Бусад" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="Network total" />
+          <Value Type="System.String" Value="Нийт гомдол" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+  </ColorScheme>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical">
+        <LayoutGroup DashboardItem="groupDashboardItem2" Weight="1.2299415615669864">
+          <LayoutItem DashboardItem="chartDashboardItem2" Weight="0.88609854932514875" />
+          <LayoutItem DashboardItem="chartDashboardItem6" Weight="0.60988990728777515" />
+          <LayoutItem DashboardItem="chartDashboardItem5" Weight="0.85670587327524828" />
+          <LayoutItem DashboardItem="chartDashboardItem3" Weight="2.9617705566007078" />
+          <LayoutItem DashboardItem="chartDashboardItem1" Weight="1.0368209098481822" />
+          <LayoutItem DashboardItem="chartDashboardItem4" Weight="3.26267840579109" />
+        </LayoutGroup>
+        <LayoutGroup DashboardItem="groupDashboardItem1" Weight="1.2588922805094276">
+          <LayoutItem DashboardItem="chartDashboardItem10" Weight="0.56776640180782456" />
+          <LayoutItem DashboardItem="chartDashboardItem9" Weight="0.40935459512298733" />
+          <LayoutItem DashboardItem="chartDashboardItem11" Weight="0.52380717393872267" />
+          <LayoutItem DashboardItem="chartDashboardItem8" Weight="1.9358319992949251" />
+          <LayoutItem DashboardItem="chartDashboardItem7" Weight="0.67410182459726531" />
+          <LayoutItem DashboardItem="chartDashboardItem12" Weight="2.1029693890089085" />
+        </LayoutGroup>
+        <LayoutGroup DashboardItem="groupDashboardItem3" Weight="0.84042088539855864" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>
