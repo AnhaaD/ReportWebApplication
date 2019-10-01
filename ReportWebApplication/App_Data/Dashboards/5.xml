@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="2. ТГ - IPTV Хэлтэс" />
+  <DataSources>
+    <SqlDataSource Name="CustomSqlQuery" ComponentName="sqlDataSource1">
+      <Connection Name="CallCenter" FromAppConfig="true" />
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>SELECT
+   problemdate,
+   cat2id,
+   cat3id,
+   CASE
+        WHEN cat2id IN ('97218','177746','122525','84653','124501','140611','161432') THEN 'IPTV'
+        WHEN cat2id NOT IN ('97218','177746','122525','84653','124501','140611','161432') THEN 'ТГ Нийт'
+        ELSE NULL
+    END AS sort1,
+    CASE
+          WHEN cat2id IN ('97218','177746','122525','84653','124501') THEN 'Өрх'
+          WHEN cat2id IN ('161432') THEN 'Look TV'
+        ELSE NULL
+    END AS sort2,
+    CASE
+        WHEN cat2id IN ('97218','177746','122525','84653','124501','161432') THEN 'Нийт'
+        ELSE NULL
+    END AS sort2total,
+    CASE
+        WHEN cat3id IN ('97219','107134') THEN 'Box той холбоотой давтан'
+        WHEN cat2id IN ('97218','177746','122525','84653','124501','140611','161432') AND cat3id NOT IN ('97219','107134') THEN 'Бусад гомдол'  
+       ELSE NULL
+    END AS sort3
+ FROM
+     UNI_CALLCENTER.problem LEFT
+     JOIN (
+         SELECT
+             ptype.grouppkid,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,3) + 2,instr(tpathid,'&gt;&gt;',1,4) - instr(tpathid,'&gt;&gt;',1,3) - 2) cat2id,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,4) + 2,instr(tpathid,'&gt;&gt;',1,5) - instr(tpathid,'&gt;&gt;',1,4) - 2) cat3id
+         FROM
+             (
+                 SELECT
+                     grouppkid,
+                     sys_connect_by_path(groupname,'&gt;&gt;') || '&gt;&gt;' AS tpath,
+                     sys_connect_by_path(grouppkid,'&gt;&gt;') || '&gt;&gt;' AS tpathid
+                 FROM
+                 UNI_CALLCENTER.problemtype
+                 START WITH
+                     parentpkid =-1
+                 CONNECT BY
+                     PRIOR grouppkid = parentpkid
+             ) ptype
+     ) tproblemtype ON problem.grouppkid = tproblemtype.grouppkid
+        WHERE problemdate BETWEEN add_months(sysdate,-2) AND SYSDATE
+        AND
+        cat2id IN (
+        '12324',
+        '12390',
+        '84797',
+        '19821',
+        '12326',
+        '14041',
+        '14906',
+        '14905',
+        '2961',
+        '99203',
+        '176678',
+        '169608',
+        '180119',
+        '97218',
+        '97260',
+        '140908',
+        '142069',
+        '97319',
+        '97320',
+        '97321',
+        '97238',
+        '126919',
+        '97269',
+        '177746',
+        '97156',
+        '97406',
+        '89183',
+        '109562',
+        '159249',
+        '122525',
+        '124129',
+        '124753',
+        '124910',
+        '173984',
+        '204975',
+        '84648',
+        '84647',
+        '84653',
+        '120716',
+        '124501',
+        '128694',
+        '134131',
+        '134382',
+        '175974',
+        '113996',
+        '113998',
+        '114394',
+        '140611',
+        '161432',
+        '161436',
+        '161438',
+        '161440'
+        )</Sql>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+      <CalculatedFields>
+        <CalculatedField Name="Date1" Expression="Iif([PROBLEMDATE] &gt;= ?beforedate1 And [PROBLEMDATE] &lt;= ?afterdate1, 1, 0)" DataType="Integer" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Date2" Expression="Iif([PROBLEMDATE] &gt;= ?beforedate2 And [PROBLEMDATE] &lt;= ?afterdate2, 1, 0)" DataType="Auto" DataMember="CustomSqlQuery" />
+      </CalculatedFields>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="beforedate1" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="beforedate1" />
+    <Parameter Name="afterdate1" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="afterdate1" />
+    <Parameter Name="beforedate2" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="beforedate2" />
+    <Parameter Name="afterdate2" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Description="afterdate2" />
+  </Parameters>
+  <Items>
+    <Chart ComponentName="chartDashboardItem1" Name="Chart 1" ShowCaption="false" DataSource="sqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="SORT1" DefaultId="DataItem2" />
+        <Dimension DataMember="SORT1" DefaultId="DataItem0" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem0" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+      <AxisX Reverse="true" />
+    </Chart>
+    <Chart ComponentName="chartDashboardItem2" Name="Chart 2" ShowCaption="false" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not IsNullOrEmpty([DataItem1])">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="SORT3" ColoringMode="None" DefaultId="DataItem1" />
+        <Dimension DataMember="SORT3" DefaultId="DataItem2" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem2" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem3" Name="Chart 3" ShowCaption="false" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not(IsNullOrEmpty([DataItem2]))">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="SORT2" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+      <AxisX Reverse="true" />
+    </Chart>
+    <Pie ComponentName="pieDashboardItem1" Name="Pies 1" ShowCaption="false" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not IsNullOrEmpty([DataItem1])">
+      <DataItems>
+        <Measure DataMember="Date2" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="SORT3" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Pie ComponentName="pieDashboardItem2" Name="Pies 2" ShowCaption="false" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not IsNullOrEmpty([DataItem1])">
+      <DataItems>
+        <Measure DataMember="Date2" Name="Эзлэх хувь" DefaultId="DataItem0" />
+        <Dimension DataMember="SORT2" DefaultId="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+      </Values>
+    </Pie>
+    <Chart ComponentName="chartDashboardItem4" Name="Chart 4" ShowCaption="false" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="Not IsNullOrEmpty([DataItem2])">
+      <DataItems>
+        <Measure DataMember="Date1" DefaultId="DataItem0" />
+        <Measure DataMember="Date2" DefaultId="DataItem1" />
+        <Dimension DataMember="SORT2TOTAL" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+            <Simple>
+              <Value DefaultId="DataItem1" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem5" Name="Chart 5" ShowCaption="false" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" FilterString="[DataItem1] &lt;&gt; 'ТГ Нийт'">
+      <DataItems>
+        <Measure DataMember="Date2" DefaultId="DataItem0" />
+        <Dimension DataMember="SORT1" DefaultId="DataItem1" />
+        <Dimension DataMember="SORT1" DefaultId="DataItem2" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem2" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value DefaultId="DataItem0" />
+              <PointLabelOptions ContentType="Value" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+  </Items>
+  <ColorScheme>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <MeasureKey>
+        <Definition DataMember="Date1" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-16384">
+      <MeasureKey>
+        <Definition DataMember="Date2" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-16384">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT1" />
+          <Value Type="System.String" Value="IPTV" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT1" />
+          <Value Type="System.String" Value="ТГ Нийт" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT3" />
+          <Value Type="System.String" Value="Box той холбоотой давтан" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-16384">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT3" />
+          <Value Type="System.String" Value="Бусад гомдол" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT2" />
+          <Value Type="System.String" Value="Өрх" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-16384">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT2" />
+          <Value Type="System.String" Value="Look TV" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="CustomSqlQuery" Color="-12299158">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="SORT3" />
+          <Value Type="System.String" Value="D86D8A6C-0D87-4CA4-9C15-3356A83699B5" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+  </ColorScheme>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical">
+        <LayoutGroup>
+          <LayoutItem DashboardItem="chartDashboardItem1" Weight="0.89706696181516343" />
+          <LayoutItem DashboardItem="chartDashboardItem3" Weight="1.7006087437742126" />
+          <LayoutItem DashboardItem="chartDashboardItem4" Weight="0.402324294410624" />
+        </LayoutGroup>
+        <LayoutGroup>
+          <LayoutItem DashboardItem="chartDashboardItem5" Weight="0.45766463752075265" />
+          <LayoutItem DashboardItem="chartDashboardItem2" Weight="1.221361372440509" />
+          <LayoutItem DashboardItem="pieDashboardItem1" Weight="1.1571665744327615" />
+          <LayoutItem DashboardItem="pieDashboardItem2" Weight="1.1638074156059768" />
+        </LayoutGroup>
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

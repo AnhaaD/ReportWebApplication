@@ -1,0 +1,1029 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="ReportWebApplication.Site1" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+      <style>
+        .custom-bg {
+            height: 40px;
+            background-image: linear-gradient(to right, #40dcb2, #40dc7e);
+            box-shadow: 0 0 0 0 #37bd83, 0 0 0 0 #40dc98;
+            text-shadow: none;
+            border: none;
+        }
+        .iconNameWrapper{
+            background-color: #fff;
+        }
+      </style>
+
+    <script>
+        function onBeforeRender(sender, e) {
+            var innerControl = sender.getDashboardControl();
+            var extension = new DevExpress.Dashboard.DashboardPanelExtension(innerControl);
+            innerControl.registerExtension(extension);
+
+            var dashboardControl = sender.GetDashboardControl();
+            dashboardControl.registerExtension(new CustomItems.OnlineMapItemExtension(dashboardControl)); 
+        }
+    </script>
+
+     <link href="./css/style.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/css/uikit.min.css" />
+
+      <style>
+          .create-temp {
+            height:40px;
+            background-image: linear-gradient(to right, #40dcb2, #40dc7e);
+            box-shadow: 0 0 0 0 #37bd83, 0 0 0 0 #40dc98;
+            text-shadow: none;
+            border: none;
+          }
+    </style>
+
+</head>
+<body>
+        <!-- Preloader -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- Main wrapper -->
+    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full"  style="position:absolute; top:0; right:0;bottom:0;left:0;">
+        <!-- Topbar header -->
+        <header class="topbar" data-navbarbg="skin5">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header" data-logobg="skin5">
+                    <a class="navbar-brand" href="#">
+                        <b class="logo-icon">
+                            <img src="./img/favicon.png" alt="homepage" class="light-logo" style="margin-left: 8px;"/>
+                        </b>
+                        <span class="logo-text">  
+                             <img src="./img/unitel_telecom_logo.png" class="light-logo" alt="homepage" width="80"/>
+                        </span>
+                    </a>
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+                </div>
+          
+                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                    <ul class="navbar-nav float-left mr-auto">
+                        <li class="nav-item search-box"> <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
+                            <form class="app-search position-absolute">
+                                <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
+                            </form>
+                        </li>
+                    </ul>
+                    <!-- Right side toggle and nav items -->
+                    <ul class="navbar-nav float-right">
+                        <!-- User profile and search -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="./img/user.png" alt="user" class="rounded-circle" width="31">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd animated">
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- End Topbar header -->
+
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar" data-sidebarbg="skin6">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav" style="padding-top:20px;">
+                    <ul id="sidebarnav">
+                        <li>
+                            <!-- User Profile-->
+                            <div class="user-profile d-flex no-block dropdown m-t-20">
+                                <div class="user-pic">
+                                    <img src="./img/user.png" alt="users" class="rounded-circle" width="40" />
+                                </div>
+                                <div class="user-content hide-menu m-l-10" style="padding-left:10px;">
+                                    <a href="javascript:void(0)" class="" id="Userdd" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <h5 class="m-b-0 user-name font-medium">User <i class="fa fa-angle-down"></i></h5>
+                                        <span class="op-5 user-email">user@unitel.mn</span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="Userdd">
+                                        <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
+                                        <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
+                                        <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End User Profile-->
+                        </li>
+          
+                        <li class="p-15 m-t-10" style="padding:15px;"><a href="javascript:void(0)" class="btn btn-block create-temp text-white no-block d-flex align-items-center"><i class="fa fa-plus-square"></i> <span class="hide-menu m-l-5" style="padding-left:5px;">New</span> </a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-google-maps"></i><span class="hide-menu">Map</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-account-location"></i><span class="hide-menu">item 2</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-file-document-box"></i><span class="hide-menu">item 3</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">item 4</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">item 5</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">item 6</span></a></li>
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+
+        <!-- Page wrapper  -->
+        <div class="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                         <form id="form1" runat="server" style="height:850px;" >
+                                                  <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                                </asp:ContentPlaceHolder>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="footer text-center">
+                  
+                </footer>
+        </div>
+    </div>
+
+
+    <div id="modal-full" class="uk-modal-full" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-full uk-close-large" type="button" uk-close id="closeMapBtn"></button>
+        <div class="uk-grid-collapse uk-child-width-1-2@s" uk-grid>
+
+            <div id="googleMap" uk-height-viewport></div>
+
+            <div class="uk-padding-large">
+
+                <div uk-slider>
+
+                    <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1">
+
+                        <ul class="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@m uk-grid">
+                            <li>
+                                <img src="https://lh4.googleusercontent.com/-HpyRMHQhjI8/XTwsg8qswDI/AAAAAAAEN90/IaWcXoVI-UIS2gq4Q5vCVf4MEqYZM02dgCLIBGAYYCw/w423-h238-k-no/" alt="">
+                            </li>
+                            <li>
+                                <img src="https://lh6.googleusercontent.com/-56E6SFZGMZQ/WYG-DSMJVxI/AAAAAAABQr4/5wCmR2c1Dvc-2yDOC8mqu-EQq1mTYLKeACLIBGAYYCw/w423-h238-k-no/" alt="">
+                            </li>
+                            <li>
+                                <img src="./img/b2.jpg" alt="">
+                            </li>
+                            <li>
+                                <img src="https://montsame.mn/files/p1ci8qdqjo1oi41beqoa81ohr1go43.jpg" alt="">
+                            </li>
+                            <li>
+                                <img src="https://live.staticflickr.com/8472/8412486863_61b1649efe_b.jpg" alt="">
+                            </li>
+
+                        </ul>
+
+                        <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+                        <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
+
+                    </div>
+
+                    <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+
+                </div>
+
+                <h1 id="m_province_name">Headline</h1>
+
+                <p id="m_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip </p>
+
+                <div class="uk-child-width-expand@s uk-padding-remove" uk-grid>
+
+                    <div>
+                            <!-- <h4>Default</h4> -->
+                            <ul class="uk-list uk-list-divider">
+                                <li id = "totalNum"></li>
+                               <!-- <li id = "total2g"></li>
+                                <li id = "total3g"></li>
+                                <li id = "total4g"></li> -->
+                            </ul>
+                        </div>
+                </div>
+
+                <div class="uk-child-width-expand@s uk-padding-remove" uk-grid>
+
+                <div class="uk-overflow-auto uk-height-max-large">
+                    <table class="uk-table uk-table-hover uk-table-middle uk-table-divider" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="uk-table-shrink">Төрөл</th>
+                                <th class="uk-table-small">Огноо</th>
+                                <th class="uk-width-small">Залгасан дугаар</th>
+                                <th class="uk-table-shrink uk-text-nowrap">Асуудалтай дугаар</th>
+                                <th class="uk-width-small">Ангилал-1</th>
+                                <th class="uk-width-small">Ангилал-2</th>
+                                <th class="uk-width-small">Ангилал-3</th>
+                                <th class="uk-width-small">Ангилал-4</th>
+                                <th class="uk-width-small">Ангилал-5</th>
+                            </tr>
+                        </thead>
+                        <tbody id="problemList">
+
+                       
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+  
+
+
+
+     <script src="map-custom-online.js"></script>
+
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/custom.js"></script>
+
+   
+     
+     <script src="/js/province.js"></script>
+     <script src="/js/area_arhangay.js"></script>
+     <script src="/js/area-bayanhongor.js"></script>
+     <script src="/js/area_bulgan.js"></script>
+     <script src="/js/area_darhanuul.js"></script>
+     <script src="/js/area_dornod.js"></script>
+     <script src="/js/area_dornogovi.js"></script>
+     <script src="/js/area_dundgovi"></script>
+     <script src="/js/area_govi_altay"></script>
+     <script src="/js/area_govisumber"></script>
+     <script src="/js/area_hentiy"></script>
+     <script src="/js/area_hovd.js"></script>
+     <script src="/js/area_hovsgol.js"></script>
+     <script src="/js/area_omnogovi.js"></script>
+     <script src="/js/area_orhon.js"></script>
+     <script src="/js/area_ovorhangay.js"></script>
+     <script src="/js/area_selenge.js"></script>
+     <script src="/js/area_suhbaatar.js"></script>
+     <script src="/js/area_uvs.js"></script>
+     <script src="/js/area_zavhan.js"></script>
+
+  
+        
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit-icons.min.js"></script>
+
+  
+    <script>
+
+        
+        function showModal() {
+            setGoogleMap();
+        }
+
+        function setGoogleMap() {
+
+            var mapValue = getAll();
+            var data = getAllData();
+
+            var mapLatitude = mapValue[0];
+            var mapLongitude = mapValue[1];
+            var mapProvince = mapValue[2];
+
+            var sortedData = [];
+
+            for (let value of Object.values(data)) {
+                switch (value.category3) {
+                    case mapProvince:
+                        sortedData.push(value);
+                        break;
+                }
+            }
+
+            if (sortedData !== null) {
+                setGoogleMapArea(mapProvince, mapLatitude, mapLongitude, sortedData);
+            }
+
+        }
+
+        function setGoogleMapArea(aimag, m_lat, m_lng, m_data) {
+            var sortedData = m_data;
+
+            alert(aimag);
+
+            UIkit.modal('#modal-full').show();
+
+            var location = { lat: m_lat, lng: m_lng };
+
+            var map = new google.maps.Map(document.getElementById('googleMap'), {
+                zoom: 7,
+                center: location
+            });
+
+            switch (aimag) {
+                case 'Архангай':
+                    setArhangayArea(1).setMap(map);
+                    setArhangayArea(2).setMap(map);
+                    setArhangayArea(3).setMap(map);
+                    setArhangayArea(4).setMap(map);
+                    setArhangayArea(5).setMap(map);
+                    setArhangayArea(6).setMap(map);
+                    setArhangayArea(7).setMap(map);
+                    setArhangayArea(8).setMap(map);
+                    setArhangayArea(9).setMap(map);
+                    setArhangayArea(10).setMap(map);
+                    setArhangayArea(11).setMap(map);
+                    setArhangayArea(12).setMap(map);
+                    setArhangayArea(13).setMap(map);
+                    setArhangayArea(14).setMap(map);
+                    setArhangayArea(15).setMap(map);
+                    setArhangayArea(16).setMap(map);
+                    setArhangayArea(17).setMap(map);
+                    setArhangayArea(18).setMap(map);
+                    setArhangayArea(19).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+
+                    break;
+                case 'Баян-Өлгий':
+                    setProvinceArea(1).setMap(map);
+                    setProvinceArea(2).setMap(map);
+                    setProvinceArea(3).setMap(map);
+                    setProvinceArea(4).setMap(map);
+                    setProvinceArea(5).setMap(map);
+                    setProvinceArea(6).setMap(map);
+                    setProvinceArea(7).setMap(map);
+                    setProvinceArea(8).setMap(map);
+                    setProvinceArea(9).setMap(map);
+                    setProvinceArea(10).setMap(map);
+                    setProvinceArea(11).setMap(map);
+                    setProvinceArea(12).setMap(map);
+                    setProvinceArea(13).setMap(map);
+                    setProvinceArea(14).setMap(map);
+
+
+                    document.getElementById("m_desc").innerHTML = 'Баруун талаараа Алтайн нурууны хяр дагаж БНХАУ-ын Шинжаан-Уйгарын Өөртөө засах оронтой 450 км, хойт талаараа Сийлхэмийн нуруу дагаж ОХУ-ын Алтайн Бүгд Найрамдах Улстай 225 км, зүүн талаараа Увс аймагтай 165 км, зүүн ба урьд талаараа Ховд аймагтай 450 км нутгаар хиллэдэг';
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+
+                    var totalCount = m_data.length;
+
+                    document.getElementById("totalNum").innerHTML = 'Нийт гомдол - ' + totalCount;
+
+                    setDistrict(sortedData, map);
+
+                    break;
+                case 'Баянхонгор':
+                    setBayanhongorArea(1).setMap(map);
+                    setBayanhongorArea(2).setMap(map);
+                    setBayanhongorArea(3).setMap(map);
+                    setBayanhongorArea(4).setMap(map);
+                    setBayanhongorArea(5).setMap(map);
+                    setBayanhongorArea(6).setMap(map);
+                    setBayanhongorArea(7).setMap(map);
+                    setBayanhongorArea(8).setMap(map);
+                    setBayanhongorArea(9).setMap(map);
+                    setBayanhongorArea(10).setMap(map);
+                    setBayanhongorArea(11).setMap(map);
+                    setBayanhongorArea(12).setMap(map);
+                    setBayanhongorArea(13).setMap(map);
+                    setBayanhongorArea(14).setMap(map);
+                    setBayanhongorArea(15).setMap(map);
+                    setBayanhongorArea(16).setMap(map);
+                    setBayanhongorArea(17).setMap(map);
+                    setBayanhongorArea(18).setMap(map);
+                    setBayanhongorArea(19).setMap(map);
+                    setBayanhongorArea(20).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+
+                    break;
+                case 'Булган':
+                    setBulganArea(1).setMap(map);
+                    setBulganArea(2).setMap(map);
+                    setBulganArea(3).setMap(map);
+                    setBulganArea(4).setMap(map);
+                    setBulganArea(5).setMap(map);
+                    setBulganArea(6).setMap(map);
+                    setBulganArea(7).setMap(map);
+                    setBulganArea(8).setMap(map);
+                    setBulganArea(9).setMap(map);
+                    setBulganArea(10).setMap(map);
+                    setBulganArea(11).setMap(map);
+                    setBulganArea(12).setMap(map);
+                    setBulganArea(13).setMap(map);
+                    setBulganArea(14).setMap(map);
+                    setBulganArea(15).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+
+                    break;
+                case 'Дархан-Уул':
+                    setDarhanUulArea(1).setMap(map);
+                    setDarhanUulArea(2).setMap(map);
+                    setDarhanUulArea(3).setMap(map);
+                    setDarhanUulArea(4).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Дорнод':
+                    setDornodArea(1).setMap(map);
+                    setDornodArea(2).setMap(map);
+                    setDornodArea(3).setMap(map);
+                    setDornodArea(4).setMap(map);
+                    setDornodArea(5).setMap(map);
+                    setDornodArea(6).setMap(map);
+                    setDornodArea(7).setMap(map);
+                    setDornodArea(8).setMap(map);
+                    setDornodArea(9).setMap(map);
+                    setDornodArea(10).setMap(map);
+                    setDornodArea(11).setMap(map);
+                    setDornodArea(12).setMap(map);
+                    setDornodArea(13).setMap(map);
+                    setDornodArea(14).setMap(map);
+                    setDornodArea(15).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Дорноговь':
+
+                    setDornoGoviArea(1).setMap(map);
+                    setDornoGoviArea(2).setMap(map);
+                    setDornoGoviArea(3).setMap(map);
+                    setDornoGoviArea(4).setMap(map);
+                    setDornoGoviArea(5).setMap(map);
+                    setDornoGoviArea(6).setMap(map);
+                    setDornoGoviArea(7).setMap(map);
+                    setDornoGoviArea(8).setMap(map);
+                    setDornoGoviArea(9).setMap(map);
+                    setDornoGoviArea(10).setMap(map);
+                    setDornoGoviArea(11).setMap(map);
+                    setDornoGoviArea(12).setMap(map);
+                    setDornoGoviArea(13).setMap(map);
+                    setDornoGoviArea(14).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+
+                    break;
+                case 'Дундговь':
+                   setDundGoviArea(1).setMap(map);
+                   setDundGoviArea(2).setMap(map);
+                   setDundGoviArea(3).setMap(map);
+                   setDundGoviArea(4).setMap(map);
+                   setDundGoviArea(5).setMap(map);
+                   setDundGoviArea(6).setMap(map);
+                   setDundGoviArea(7).setMap(map);
+                   setDundGoviArea(8).setMap(map);
+                   setDundGoviArea(9).setMap(map);
+                   setDundGoviArea(10).setMap(map);
+                   setDundGoviArea(11).setMap(map);
+                   setDundGoviArea(12).setMap(map);
+                   setDundGoviArea(13).setMap(map);
+                   setDundGoviArea(14).setMap(map);
+                   setDundGoviArea(15).setMap(map);
+
+                   document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                   document.getElementById("problemList").innerHTML = "";
+                   setDistrict(sortedData, map);
+
+                    break;
+                case 'Dzavhan':
+                    setZavhanArea(1).setMap(map);
+                    setZavhanArea(2).setMap(map);
+                    setZavhanArea(3).setMap(map);
+                    setZavhanArea(4).setMap(map);
+                    setZavhanArea(5).setMap(map);
+                    setZavhanArea(6).setMap(map);
+                    setZavhanArea(7).setMap(map);
+                    setZavhanArea(8).setMap(map);
+                    setZavhanArea(9).setMap(map);
+                    setZavhanArea(10).setMap(map);
+                    setZavhanArea(11).setMap(map);
+                    setZavhanArea(12).setMap(map);
+                    setZavhanArea(13).setMap(map);
+                    setZavhanArea(14).setMap(map);
+                    setZavhanArea(15).setMap(map);
+                    setZavhanArea(16).setMap(map);
+                    setZavhanArea(17).setMap(map);
+                    setZavhanArea(18).setMap(map);
+                    setZavhanArea(19).setMap(map);
+                    setZavhanArea(20).setMap(map);
+                    setZavhanArea(21).setMap(map);
+                    setZavhanArea(22).setMap(map);
+                    setZavhanArea(23).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Говь-Алтай':
+                    setGoviAltayArea(1).setMap(map);
+                    setGoviAltayArea(2).setMap(map);
+                    setGoviAltayArea(3).setMap(map);
+                    setGoviAltayArea(4).setMap(map);
+                    setGoviAltayArea(5).setMap(map);
+                    setGoviAltayArea(6).setMap(map);
+                    setGoviAltayArea(7).setMap(map);
+                    setGoviAltayArea(8).setMap(map);
+                    setGoviAltayArea(9).setMap(map);
+                    setGoviAltayArea(10).setMap(map);
+                    setGoviAltayArea(11).setMap(map);
+                    setGoviAltayArea(12).setMap(map);
+                    setGoviAltayArea(13).setMap(map);
+                    setGoviAltayArea(14).setMap(map);
+                    setGoviAltayArea(15).setMap(map);
+                    setGoviAltayArea(16).setMap(map);
+                    setGoviAltayArea(17).setMap(map);
+                    setGoviAltayArea(18).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+
+                    break;
+                case 'Govisümber':
+                    setGoviSumberArea(1).setMap(map);
+                    setGoviSumberArea(2).setMap(map);
+                    setGoviSumberArea(3).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Хэнтий':
+                    alert("regreg");
+
+                    setHentiyArea(1).setMap(map);
+                    setHentiyArea(2).setMap(map);
+                    setHentiyArea(3).setMap(map);
+                    setHentiyArea(4).setMap(map);
+                    setHentiyArea(5).setMap(map);
+                    setHentiyArea(6).setMap(map);
+                    setHentiyArea(7).setMap(map);
+                    setHentiyArea(8).setMap(map);
+                    setHentiyArea(9).setMap(map);
+                    setHentiyArea(10).setMap(map);
+                    setHentiyArea(11).setMap(map);
+                    setHentiyArea(12).setMap(map);
+                    setHentiyArea(13).setMap(map);
+                    setHentiyArea(14).setMap(map);
+                    setHentiyArea(15).setMap(map);
+                    setHentiyArea(16).setMap(map);
+                    setHentiyArea(17).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Ховд':
+                    setHovdArea(1).setMap(map);
+                    setHovdArea(2).setMap(map);
+                    setHovdArea(3).setMap(map);
+                    setHovdArea(4).setMap(map);
+                    setHovdArea(5).setMap(map);
+                    setHovdArea(6).setMap(map);
+                    setHovdArea(7).setMap(map);
+                    setHovdArea(8).setMap(map);
+                    setHovdArea(9).setMap(map);
+                    setHovdArea(10).setMap(map);
+                    setHovdArea(11).setMap(map);
+                    setHovdArea(12).setMap(map);
+                    setHovdArea(13).setMap(map);
+                    setHovdArea(14).setMap(map);
+                    setHovdArea(15).setMap(map);
+                    setHovdArea(16).setMap(map);
+                    setHovdArea(17).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Хөвсгөл':
+                    setHovsgolArea(1).setMap(map);
+                    setHovsgolArea(2).setMap(map);
+                    setHovsgolArea(3).setMap(map);
+                    setHovsgolArea(4).setMap(map);
+                    setHovsgolArea(5).setMap(map);
+                    setHovsgolArea(6).setMap(map);
+                    setHovsgolArea(7).setMap(map);
+                    setHovsgolArea(8).setMap(map);
+                    setHovsgolArea(9).setMap(map);
+                    setHovsgolArea(10).setMap(map);
+                    setHovsgolArea(11).setMap(map);
+                    setHovsgolArea(12).setMap(map);
+                    setHovsgolArea(13).setMap(map);
+                    setHovsgolArea(14).setMap(map);
+                    setHovsgolArea(15).setMap(map);
+                    setHovsgolArea(16).setMap(map);
+                    setHovsgolArea(17).setMap(map);
+                    setHovsgolArea(18).setMap(map);
+                    setHovsgolArea(19).setMap(map);
+                    setHovsgolArea(20).setMap(map);
+                    setHovsgolArea(21).setMap(map);
+                    setHovsgolArea(22).setMap(map);
+                    setHovsgolArea(23).setMap(map);
+                    setHovsgolArea(24).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Өмнөговь':
+
+                    setOmnogoviArea(1).setMap(map);
+                    setOmnogoviArea(2).setMap(map);
+                    setOmnogoviArea(3).setMap(map);
+                    setOmnogoviArea(4).setMap(map);
+                    setOmnogoviArea(5).setMap(map);
+                    setOmnogoviArea(6).setMap(map);
+                    setOmnogoviArea(7).setMap(map);
+                    setOmnogoviArea(8).setMap(map);
+                    setOmnogoviArea(9).setMap(map);
+                    setOmnogoviArea(10).setMap(map);
+                    setOmnogoviArea(11).setMap(map);
+                    setOmnogoviArea(12).setMap(map);
+                    setOmnogoviArea(13).setMap(map);
+                    setOmnogoviArea(14).setMap(map);
+                    setOmnogoviArea(15).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Орхон /Эрдэнэт/':
+                    setOrhonArea(1).setMap(map);
+                    setOrhonArea(2).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+
+                    break;
+                case 'Өвөрхангай':
+                    setOverhangayArea(1).setMap(map);
+                    setOverhangayArea(2).setMap(map);
+                    setOverhangayArea(3).setMap(map);
+                    setOverhangayArea(4).setMap(map);
+                    setOverhangayArea(5).setMap(map);
+                    setOverhangayArea(6).setMap(map);
+                    setOverhangayArea(7).setMap(map);
+                    setOverhangayArea(8).setMap(map);
+                    setOverhangayArea(9).setMap(map);
+                    setOverhangayArea(10).setMap(map);
+                    setOverhangayArea(11).setMap(map);
+                    setOverhangayArea(12).setMap(map);
+                    setOverhangayArea(13).setMap(map);
+                    setOverhangayArea(14).setMap(map);
+                    setOverhangayArea(15).setMap(map);
+                    setOverhangayArea(16).setMap(map);
+                    setOverhangayArea(17).setMap(map);
+                    setOverhangayArea(18).setMap(map);
+                    setOverhangayArea(19).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Сэлэнгэ':
+                    setSelengeArea(1).setMap(map);
+                    setSelengeArea(2).setMap(map);
+                    setSelengeArea(3).setMap(map);
+                    setSelengeArea(4).setMap(map);
+                    setSelengeArea(5).setMap(map);
+                    setSelengeArea(6).setMap(map);
+                    setSelengeArea(7).setMap(map);
+                    setSelengeArea(8).setMap(map);
+                    setSelengeArea(9).setMap(map);
+                    setSelengeArea(10).setMap(map);
+                    setSelengeArea(11).setMap(map);
+                    setSelengeArea(12).setMap(map);
+                    setSelengeArea(13).setMap(map);
+                    setSelengeArea(14).setMap(map);
+                    setSelengeArea(15).setMap(map);
+                    setSelengeArea(16).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Сүхбаатар':
+                    setSuhbaatarArea(1).setMap(map);
+                    setSuhbaatarArea(2).setMap(map);
+                    setSuhbaatarArea(3).setMap(map);
+                    setSuhbaatarArea(4).setMap(map);
+                    setSuhbaatarArea(5).setMap(map);
+                    setSuhbaatarArea(6).setMap(map);
+                    setSuhbaatarArea(7).setMap(map);
+                    setSuhbaatarArea(8).setMap(map);
+                    setSuhbaatarArea(9).setMap(map);
+                    setSuhbaatarArea(10).setMap(map);
+                    setSuhbaatarArea(11).setMap(map);
+                    setSuhbaatarArea(12).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Төв':
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+                    setDistrict(sortedData, map);
+                    break;
+                case 'Улаанбаатарын дүүргүүд':
+                    alert('Ulaanbaatar');
+                    break;
+                case 'Увс':
+                    setUvsArea(1).setMap(map);
+                    setUvsArea(2).setMap(map);
+                    setUvsArea(3).setMap(map);
+                    setUvsArea(4).setMap(map);
+                    setUvsArea(5).setMap(map);
+                    setUvsArea(6).setMap(map);
+                    setUvsArea(7).setMap(map);
+                    setUvsArea(8).setMap(map);
+                    setUvsArea(9).setMap(map);
+                    setUvsArea(10).setMap(map);
+                    setUvsArea(11).setMap(map);
+                    setUvsArea(12).setMap(map);
+                    setUvsArea(13).setMap(map);
+                    setUvsArea(14).setMap(map);
+                    setUvsArea(15).setMap(map);
+                    setUvsArea(16).setMap(map);
+                    setUvsArea(17).setMap(map);
+                    setUvsArea(18).setMap(map);
+                    setUvsArea(19).setMap(map);
+
+                    document.getElementById("m_province_name").innerHTML = aimag + ' аймаг';
+                    document.getElementById("problemList").innerHTML = "";
+
+                    setDistrict(sortedData, map);
+                    break;
+            }
+        }
+
+        function setDistrict(sortedData, map) {
+
+            var iconName;
+            var total_count;
+            var districtData = [];
+            var result = null;
+            // alert(JSON.stringify(sortedData[0].category4));
+
+            for (i = 0; i <= sortedData.length; i++) {
+
+                if (sortedData[i] && sortedData[i].category2 == 'ТГ - 2G Сүлжээ') {
+                    iconName = "<i class='mdi mdi-signal-2g'></i>";
+                } else if (sortedData[i] && sortedData[i].category2 == 'ТГ - 3G Сүлжээ') {
+                    iconName = "<i class='mdi mdi-signal-3g'></i>";
+                } else if (sortedData[i] && sortedData[i].category2 == 'ТГ - 4G Сүлжээ') {
+                    iconName = "<i class='mdi mdi-signal-4g'></i>";
+                } else {
+                    iconName = "<i class='mdi mdi-home-variant'></i>";
+                }
+
+           
+
+                $('#problemList').append("<tr><td><div class='feed-widget'><div class='feed-body'><div class='feed-item iconNameWrapper'><div class='feed-icon custom-bg'>" + iconName + "</div></div></div></div></td> <td class='uk-text-nowrap'><a class='uk-link-reset' href='#'> "
+                    + sortedData[i].p_date.toLocaleString() +
+                    "</a></td><td class='uk-text-nowrap'>" + sortedData[i].p_callphoneno + "</td> <td class='uk-text-nowrap'> "
+                    + sortedData[i].p_problemphoneno +
+                    "</td> <td class='uk-text-nowrap'>"
+                    + sortedData[i].category1 +
+                    "</td><td class='uk-text-nowrap'>"
+                    + sortedData[i].category2 +
+                    "</td> <td class='uk-text-nowrap'> "
+                    + sortedData[i].category3 +
+                    "</td> <td class='uk-text-nowrap'> "
+                    + sortedData[i].category4 +
+                    "</td> <td class='uk-text-nowrap'>"
+                    + sortedData[i].category5 +
+                    "</td></tr>");
+
+                var districtName = sortedData[i].category4;
+
+                switch (sortedData[i].category4) {
+
+                    // Архангай
+                    case 'Өлзийт сум':
+                        setMarkers(map, districtName, 48.1030253, 102.5606182, sortedData);
+                        break;
+                    case 'Цэнхэр':
+                        setMarkers(map, districtName, 47.4389969, 101.7525358, sortedData);
+                        break;
+                    case 'Өгийнуур сум':
+                        setMarkers(map, districtName, 47.6459635, 102.7645944, sortedData);
+                        break;
+                    case 'Өндөр-Улаан сум':
+                        setMarkers(map, districtName, 48.0402396, 100.5041843, sortedData);
+                        break;
+                    case 'Тариат сум':
+                        setMarkers(map, districtName, 48.155199, 99.8913911, sortedData);
+                        break;
+                    case 'Цэцэрлэг-хот':
+                        setMarkers(map, districtName, 47.4696499, 101.4774341, sortedData);
+                        break;
+                    case 'Цэцэрлэг сум':
+                        setMarkers(map, districtName, 47.4696499, 101.4774341, sortedData);
+                        break;
+
+                    // Баян-Өлгий
+                    case 'Цэнгэл  сум':
+                        setMarkers(map, districtName, 48.937639, 89.136286, sortedData);
+                        break;
+                    case 'Цэнгэл сум':
+                        setMarkers(map, districtName, 48.937639, 89.136286, sortedData);
+                        break;
+                    case 'Өлгий /төв/':
+                        setMarkers(map, districtName, 48.9706758, 89.9678382, sortedData);
+                        break;
+                    case 'Алтанцөгц сум':
+                        setMarkers(map, districtName, 49.0631331, 90.4566047, sortedData);
+                        break;
+
+                    // Булган
+                    case 'Хутаг-Өндөр сум':
+                        setMarkers(map, districtName, 49.3962513, 102.6972588, sortedData);
+                        break;
+                    case 'Дашинчилэн':
+                        setMarkers(map, districtName, 47.8507363, 104.0421247, sortedData);
+                        break;
+
+                    // Дархан-Уул
+                    case 'ДАРХАН СУМ':
+                        setMarkers(map, districtName, 49.4648434, 105.9745919, sortedData);
+                        break;
+                    case 'Орхон сум':
+                        setMarkers(map, districtName, 49.8322595, 106.1329376, sortedData);
+                        break;
+
+                    // Увс
+                    case 'Улаангом /төв/':
+                        setMarkers(map, districtName, 49.9811096, 92.0666733, sortedData);
+                        break;
+                    case 'Хяргас':
+                        setMarkers(map, districtName, 49.6678108, 93.7822875, sortedData);
+                        break;
+                    case 'Цагаанхайрхан':
+                        setMarkers(map, districtName, 49.405244, 94.251751, sortedData);
+                        break;
+                    // Ховд
+                    case 'Булган сум':
+                        setMarkers(map, districtName, 45.7469466, 91.0867701, sortedData);
+                        break;
+                    case 'Чандмань':
+                        setMarkers(map, districtName, 47.833333, 92.65, sortedData);
+                        break;
+
+                    // Баянхонгор
+                    case 'Баянцагаан':
+                        setMarkers(map, districtName, 45.0152528, 98.9366407, sortedData);
+                        break;
+                    case 'Баянлиг сум':
+                        setMarkers(map, districtName, 44.5449374, 100.8393149, sortedData);
+                        break;
+                    case 'Баянхонгор':
+                        setMarkers(map, districtName, 46.177215, 100.7118653, sortedData);
+                        break;
+
+                    // Говь - Алтай
+                    case 'Говь-Алтай сум /төв/':
+                        setMarkers(map, districtName, 45.4511227, 95.8505766, sortedData);
+                        break;
+                    case 'Говь-Алтай':
+                        setMarkers(map, districtName, 45.4511227, 95.8505766, sortedData);
+                        break;
+                    case 'Алтай':
+                        setMarkers(map, districtName, 44.6183507, 94.9195154, sortedData);
+                        break;
+
+                }
+            }
+        }
+
+        function setMarkers(map, markerTitle, districtLat, districtLng, d_data) {
+
+            var image = 'marker.png';
+            var markerLocation = { lat: districtLat, lng: districtLng };
+            var marker = new google.maps.Marker({
+                position: markerLocation,
+                map: map,
+                title: markerTitle,
+                icon: image
+            });
+            marker.setMap(map);
+
+            marker.addListener('click', function () {
+
+                var m_resource = [];
+
+                for (i = 0; i <= d_data.length; i++) {
+
+                    if (d_data[i] && d_data[i].category4 && d_data[i].category4 == markerTitle) {
+                        m_resource.push(d_data[i]);
+                        // m_resource = d_data[i];
+                        // alert(JSON.stringify(m_resource));
+                    } else {
+                        //alert('no');
+                    }
+
+                }
+
+                if (m_resource != null) {
+                    // alert(JSON.stringify(m_resource));
+                    setMarkerClickHandler(map, marker, markerTitle, m_resource);
+                } else {
+                    alert('wefwef');
+                }
+
+            });
+
+
+        }
+
+        function setMarkerClickHandler(map, marker, markerTitle, markerData) {
+
+            var m_date = "";
+            var m_callphone = "";
+
+            for (i = 0; i < markerData.length; i++) {
+
+                m_date += markerData[i].p_date.toLocaleString() + "<br>";
+                m_callphone += markerData[i].p_callphoneno + "<br>";
+            }
+
+            var contentString = '<div id="content">' +
+                '<h3 id="firstHeading" class="firstHeading">' + markerTitle + '</h3>' +
+                '<div id="bodyContent">' +
+                '<p><b>' + markerTitle + '</b> : Нийт гомдлын тоо - <b> ' + markerData.length + '</b> <br>' +
+
+                '<div class="container-fluid">' +
+                '<div class="row">' +
+                '<div class="col-sm-6">' + '<b>Огноо</b><br>' +
+                m_date
+                +
+                '</div>' +
+                '<div class="col-sm-6">' + '<b>Залгасан дугаар</b><br>' +
+                m_callphone
+                +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+
+                '<p>Тодотгол: ' + markerTitle + ', <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+                'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+                '</p>' +
+
+                '</div>' +
+                '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+            infowindow.open(map, marker);
+
+        }
+
+
+    </script>
+
+
+</body>
+</html>

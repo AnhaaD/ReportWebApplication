@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text=" Map" />
+  <DataSources>
+    <SqlDataSource Name="CustomSqlQuery" ComponentName="sqlDataSource1">
+      <Connection Name="CallCenter" FromAppConfig="true" />
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>SELECT
+   problemdate,
+   callphoneno,
+   problemphoneno,
+   cat1,
+   cat2,
+   cat2id,
+   cat3,
+   cat4,
+   cat5,
+   statusid,
+    CASE
+      WHEN cat3 = 'Улаанбаатарын дүүргүүд' THEN '47.8864'
+      WHEN cat3 = 'Дархан-Уул' THEN '49.4489'
+      WHEN cat3 = 'Орхон /Эрдэнэт/' THEN '49.0047'
+      WHEN cat3 = 'Архангай' THEN '47.8971'
+      WHEN cat3 = 'Баян-Өлгий' THEN '48.3983'
+      WHEN cat3 = 'Баянхонгор' THEN '45.1527'
+      WHEN cat3 = 'Говь-Алтай' THEN '45.4511'
+      WHEN cat3 = 'Булган' THEN '48.8232'
+      WHEN cat3 = 'Завхан' THEN '48.2388'
+      WHEN cat3 = 'Өвөрхангай' THEN '45.7624'
+      WHEN cat3 = 'Төв' THEN '47.2124'
+      WHEN cat3 = 'Ховд' THEN '47.1130'
+      WHEN cat3 = 'Увс' THEN '49.6450'
+      WHEN cat3 = 'Хөвсгөл' THEN '50.2204'
+      WHEN cat3 = 'Дорноговь' THEN '43.9654'
+      WHEN cat3 = 'Сэлэнгэ' THEN '49.4527'
+      WHEN cat3 = 'Дундговь' THEN '45.5823'
+      WHEN cat3 = 'Өмнөговь' THEN '43.5000'
+      WHEN cat3 = 'Сүхбаатар' THEN '46.5653'
+      WHEN cat3 = 'Хэнтий' THEN '47.6081'
+      WHEN cat3 = 'Говьсүмбэр' THEN '46.4763'
+      WHEN cat3 = 'Дорнод' THEN '47.4658'
+       ELSE NULL
+    END AS a_lat,
+    CASE
+      WHEN cat3 = 'Улаанбаатарын дүүргүүд' THEN '106.9057'
+      WHEN cat3 = 'Дархан-Уул' THEN '106.2325'
+      WHEN cat3 = 'Орхон /Эрдэнэт/' THEN '104.3017'
+      WHEN cat3 = 'Архангай' THEN '100.7240'
+      WHEN cat3 = 'Баян-Өлгий' THEN '89.6626'
+      WHEN cat3 = 'Баянхонгор' THEN '100.1074'
+      WHEN cat3 = 'Говь-Алтай' THEN '95.8506'
+      WHEN cat3 = 'Булган' THEN '103.5218'
+      WHEN cat3 = 'Завхан' THEN '96.0703'
+      WHEN cat3 = 'Өвөрхангай' THEN '103.0917'
+      WHEN cat3 = 'Төв' THEN '106.4154'
+      WHEN cat3 = 'Ховд' THEN '92.3111'
+      WHEN cat3 = 'Увс' THEN '93.2737'
+      WHEN cat3 = 'Хөвсгөл' THEN '100.3214'
+      WHEN cat3 = 'Дорноговь' THEN '109.1773'
+      WHEN cat3 = 'Сэлэнгэ' THEN '103.9814'
+      WHEN cat3 = 'Дундговь' THEN '106.7644'
+      WHEN cat3 = 'Өмнөговь' THEN '104.2861'
+      WHEN cat3 = 'Сүхбаатар' THEN '113.5381'
+      WHEN cat3 = 'Хэнтий' THEN '109.9373'
+      WHEN cat3 = 'Говьсүмбэр' THEN '108.5571'
+      WHEN cat3 = 'Дорнод' THEN '115.3927'
+       ELSE NULL
+    END AS a_long,
+    CASE
+       WHEN cat2id in (84797,19821,12326) THEN '46.8625'
+         ELSE NULL
+    END AS def_lat,
+       CASE
+       WHEN cat2id in (84797,19821,12326) THEN '103.8467'
+         ELSE NULL
+    END AS def_long
+ FROM
+     UNI_CALLCENTER.problem LEFT
+     JOIN (
+         SELECT
+             ptype.grouppkid,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,2) + 2,instr(tpath,'&gt;&gt;',1,3) - instr(tpath,'&gt;&gt;',1,2) - 2) cat1,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,3) + 2,instr(tpath,'&gt;&gt;',1,4) - instr(tpath,'&gt;&gt;',1,3) - 2) cat2,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,3) + 2,instr(tpathid,'&gt;&gt;',1,4) - instr(tpathid,'&gt;&gt;',1,3) - 2) cat2id,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,4) + 2,instr(tpath,'&gt;&gt;',1,5) - instr(tpath,'&gt;&gt;',1,4) - 2) cat3,
+             substr(tpathid,instr(tpathid,'&gt;&gt;',1,4) + 2,instr(tpathid,'&gt;&gt;',1,5) - instr(tpathid,'&gt;&gt;',1,4) - 2) cat3id,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,5) + 2,instr(tpath,'&gt;&gt;',1,6) - instr(tpath,'&gt;&gt;',1,5) - 2) cat4,
+             substr(tpath,instr(tpath,'&gt;&gt;',1,6) + 2,instr(tpath,'&gt;&gt;',1,7) - instr(tpath,'&gt;&gt;',1,6) - 2) cat5
+         FROM
+             (
+                 SELECT
+                     grouppkid,
+                     sys_connect_by_path(groupname,'&gt;&gt;') || '&gt;&gt;' AS tpath,
+                     sys_connect_by_path(grouppkid,'&gt;&gt;') || '&gt;&gt;' AS tpathid
+                 FROM
+                 UNI_CALLCENTER.problemtype
+                 START WITH
+                     parentpkid =-1
+                 CONNECT BY
+                     PRIOR grouppkid = parentpkid
+             ) ptype
+     ) tproblemtype ON problem.grouppkid = tproblemtype.grouppkid
+        WHERE problemdate BETWEEN add_months(sysdate,-2) AND SYSDATE
+        AND
+        cat2id IN (
+        '84797',
+        '19821',
+        '12326'
+        )</Sql>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+      <CalculatedFields>
+        <CalculatedField Name="setLatitude" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [A_LAT], [DEF_LAT])" DataType="Double" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setLongtitude" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [A_LONG], [DEF_LONG])" DataType="Double" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="Calculated Field 3" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT4], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setProblemDate" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [PROBLEMDATE], [PROBLEMDATE])" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setDistrict" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT4], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setCallPhoneNo" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CALLPHONENO], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setReason" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT5], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setProvince" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT3], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setCat2" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT2], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setCat3" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT3], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setCat4" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT4], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setCat5" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT5], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setCat1" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [CAT1], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+        <CalculatedField Name="setProblemPhoneNo" Expression="Iif([PROBLEMDATE] &gt;= ?start_date And [PROBLEMDATE] &lt;= ?end_date, [PROBLEMPHONENO], 'null')" DataType="Auto" DataMember="CustomSqlQuery" />
+      </CalculatedFields>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="start_date" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2019-09-15T00:00:00" />
+    <Parameter Name="end_date" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </Parameters>
+  <Items>
+    <CustomItem ComponentName="customItemDashboardItem1" Name="Online Map 1" DataSource="sqlDataSource1" DataMember="CustomSqlQuery" CustomItemType="OnlineMap">
+      <DataItems>
+        <Dimension DataMember="setLongtitude" DefaultId="DataItem0" />
+        <Dimension DataMember="setLatitude" DefaultId="DataItem1" />
+        <Dimension DataMember="Calculated Field 3" DefaultId="DataItem3" />
+        <Dimension DataMember="setProblemDate" DateTimeGroupInterval="DateHourMinuteSecond" DefaultId="DataItem2" />
+        <Dimension DataMember="setCallPhoneNo" DefaultId="DataItem5" />
+        <Dimension DataMember="setCat2" DefaultId="DataItem8" />
+        <Dimension DataMember="setCat3" DefaultId="DataItem4" />
+        <Dimension DataMember="setCat4" DefaultId="DataItem9" />
+        <Dimension DataMember="setCat5" DefaultId="DataItem6" />
+        <Dimension DataMember="setCat1" DefaultId="DataItem7" />
+        <Dimension DataMember="setProblemPhoneNo" DefaultId="DataItem10" />
+      </DataItems>
+      <SliceTables>
+        <SliceTable Name="SliceTable1">
+          <Dimensions>
+            <Dimension DefaultId="DataItem1" />
+            <Dimension DefaultId="DataItem0" />
+            <Dimension DefaultId="DataItem2" />
+            <Dimension DefaultId="DataItem5" />
+            <Dimension DefaultId="DataItem10" />
+            <Dimension DefaultId="DataItem7" />
+            <Dimension DefaultId="DataItem8" />
+            <Dimension DefaultId="DataItem4" />
+            <Dimension DefaultId="DataItem9" />
+            <Dimension DefaultId="DataItem6" />
+          </Dimensions>
+        </SliceTable>
+      </SliceTables>
+      <InteractivityTargets>
+        <Dimension DefaultId="DataItem1" />
+        <Dimension DefaultId="DataItem0" />
+      </InteractivityTargets>
+      <CustomMetadata Provider="Google">
+        <Latitude ItemType="Dimension" DefaultId="DataItem1" />
+        <Longitude ItemType="Dimension" DefaultId="DataItem0" />
+        <ProblemDate DefaultId="DataItem2" />
+        <CallPhoneNo DefaultId="DataItem5" />
+        <problemphoneno DefaultId="DataItem10" />
+        <cat1 DefaultId="DataItem7" />
+        <cat2 DefaultId="DataItem8" />
+        <cat3 DefaultId="DataItem4" />
+        <cat4 DefaultId="DataItem9" />
+        <cat5 DefaultId="DataItem6" />
+      </CustomMetadata>
+    </CustomItem>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutItem DashboardItem="customItemDashboardItem1" Weight="1.7475806592391576" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

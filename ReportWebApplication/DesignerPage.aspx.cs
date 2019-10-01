@@ -9,10 +9,10 @@ using DevExpress.Xpo.DB;
 using DevExpress.DataAccess.Sql;
 using DevExpress.DataAccess.ConnectionParameters;
 using DevExpress.DashboardCommon;
-using DevExpress.DataAccess.ConnectionParameters;
-using DevExpress.DataAccess.Sql;
 using DevExpress.DashboardWeb;
 using Oracle.DataAccess.Client;
+using System.Net;
+using System.IO;
 
 namespace ReportWebApplication
 {
@@ -24,28 +24,7 @@ namespace ReportWebApplication
             ASPxDashboard1.AllowExecutingCustomSql = true;
             ASPxDashboard1.EnableCustomSql = true;
             ASPxDashboard1.WorkingMode = WorkingMode.Viewer;
-
         }
-
-        
-        protected void ASPxDashboard1_ConfigureDataConnection(object sender, ConfigureDataConnectionWebEventArgs e)
-        {
-           // OracleConnectionParameters oracleParams = new OracleConnectionParameters();
-           // oracleParams.ServerName = "10.21.64.164/callcenter";
-           // oracleParams.UserName = "UNI_CC_CORE";
-           // oracleParams.Password = "Rm3iFBK1r7l3";
-
-
-            //var param = e.ConnectionParameters as CustomStringConnectionParameters;
-            //if (param != null)
-            //{
-            //    param.ConnectionString = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["dbconn"].ToString();
-            // }
-        }
-
-
-
-    
 
 
     }

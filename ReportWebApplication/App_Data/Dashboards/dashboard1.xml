@@ -257,7 +257,7 @@
   <LayoutTree>
     <LayoutGroup>
       <LayoutGroup Orientation="Vertical">
-        <LayoutGroup DashboardItem="groupDashboardItem2" Weight="0.7554904141856964">
+        <LayoutGroup DashboardItem="groupDashboardItem2" Weight="0.84380210249738474">
           <LayoutItem DashboardItem="chartDashboardItem3" Weight="0.71490778625420814" />
           <LayoutItem DashboardItem="chartDashboardItem4" Weight="0.74910064378499375" />
           <LayoutItem DashboardItem="chartDashboardItem2" Weight="0.66505120875475721" />
@@ -265,7 +265,7 @@
           <LayoutItem DashboardItem="chartDashboardItem1" Weight="2.0521745205114077" />
           <LayoutItem DashboardItem="chartDashboardItem6" Weight="1.0064965456288224" />
         </LayoutGroup>
-        <LayoutGroup DashboardItem="groupDashboardItem1" Weight="1.2445095858143036" />
+        <LayoutGroup DashboardItem="groupDashboardItem1" Weight="1.1561978975026153" />
       </LayoutGroup>
     </LayoutGroup>
   </LayoutTree>

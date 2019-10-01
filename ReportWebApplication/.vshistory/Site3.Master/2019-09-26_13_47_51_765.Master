@@ -1,0 +1,51 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site3.master.cs" Inherits="ReportWebApplication.Site3" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    
+      <style>
+        .custom-bg {
+            height: 40px;
+            background-image: linear-gradient(to right, #40dcb2, #40dc7e);
+            box-shadow: 0 0 0 0 #37bd83, 0 0 0 0 #40dc98;
+            text-shadow: none;
+            border: none;
+        }
+        .iconNameWrapper{
+            background-color: #fff;
+        }
+      </style>
+
+     <link href="./css/style.min.css" rel="stylesheet"
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/css/uikit.min.css" />
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+      <style>
+          .create-temp {
+            height:40px;
+            background-image: linear-gradient(to right, #40dcb2, #40dc7e);
+            box-shadow: 0 0 0 0 #37bd83, 0 0 0 0 #40dc98;
+            text-shadow: none;
+            border: none;
+          }
+    </style>
+
+</head>
+<body>
+
+
+
+
+    <form id="form1" runat="server">
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
