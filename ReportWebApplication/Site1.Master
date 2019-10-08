@@ -65,10 +65,10 @@
                 <div class="navbar-header" data-logobg="skin5">
                     <a class="navbar-brand" href="#">
                         <b class="logo-icon">
-                            <img src="./img/favicon.png" alt="homepage" class="light-logo" style="margin-left: 8px;"/>
+                            <img src="/img/favicon.png" alt="homepage" class="light-logo" style="margin-left: 5px;"/>
                         </b>
                         <span class="logo-text">  
-                             <img src="./img/unitel_telecom_logo.png" class="light-logo" alt="homepage" width="80"/>
+                             <img src="/img/unitel_telecom_logo.png" class="light-logo" alt="homepage" width="80"/>
                         </span>
                     </a>
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
@@ -89,11 +89,6 @@
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src="./img/user.png" alt="user" class="rounded-circle" width="31">
                             </a>
-                            <!--<div class="dropdown-menu dropdown-menu-right user-dd animated">
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
-                            </div>-->
                         </li>
                     </ul>
                 </div>
@@ -194,7 +189,7 @@
                                 <img src="https://montsame.mn/files/p1ci8qdqjo1oi41beqoa81ohr1go43.jpg" alt="">
                             </li>
                             <li>
-                                <img src="https://live.staticflickr.com/8472/8412486863_61b1649efe_b.jpg" alt="">
+                                <img src="./img/b2.jpg" alt="">
                             </li>
 
                         </ul>
@@ -257,17 +252,12 @@
 
 </div>
   
-
-
-
      <script src="map-custom-online.js"></script>
 
-    <script src="./js/popper.min.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
-    <script src="./js/custom.js"></script>
+     <script src="./js/popper.min.js"></script>
+     <script src="./js/bootstrap.min.js"></script>
+     <script src="./js/custom.js"></script>
 
-   
-     
      <script src="/js/province.js"></script>
      <script src="/js/area_arhangay.js"></script>
      <script src="/js/area-bayanhongor.js"></script>
@@ -276,8 +266,8 @@
      <script src="/js/area_dornod.js"></script>
      <script src="/js/area_dornogovi.js"></script>
 
+     <!-- <script src="/js/area_govisumber"></script> -->
 
-     <script src="/js/area_govisumber"></script>
      <script src="/js/area_hovd.js"></script>
      <script src="/js/area_hovsgol.js"></script>
      <script src="/js/area_omnogovi.js"></script>
@@ -287,22 +277,22 @@
      <script src="/js/area_suhbaatar.js"></script>
      <script src="/js/area_uvs.js"></script>
 
-     <script src="area_hentiy.js" type="text/javascript"></script>
-     <script src="area_govialtai.js" type="text/javascript"></script>
-     <script src="area_zavhan.js" type="text/javascript"></script>
-     <script src="area_dundgovi.js" type="text/javascript"></script>
+     <script type="text/javascript" src="area_hentiy.js" ></script>
+     <script type="text/javascript" src="area_govialtai.js"></script>
+     <script type="text/javascript" src="area_zavhan.js"></script>
+     <script type="text/javascript" src="area_dundgovi.js"></script>
 
+     <script type="text/javascript" src="/jsMap/customizeMap.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit-icons.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit-icons.min.js"></script>
+
 
     <script>
         $(window).resize(function () {
-
             $('.dashboardWrapper').css('height', window.innerHeight - 120 +'px');
-
         });
     </script>
 
@@ -803,11 +793,9 @@
 
         function setDistrict(sortedData, map) {
 
+            initializeMaps(map, sortedData);
+         
             var iconName;
-            var total_count;
-            var districtData = [];
-            var result = null;
-            // alert(JSON.stringify(sortedData[0].category4));
 
             for (i = 0; i <= sortedData.length; i++) {
 
@@ -820,8 +808,6 @@
                 } else {
                     iconName = "<i class='mdi mdi-home-variant'></i>";
                 }
-
-           
 
                 $('#problemList').append("<tr><td><div class='feed-widget'><div class='feed-body'><div class='feed-item iconNameWrapper'><div class='feed-icon custom-bg'>" + iconName + "</div></div></div></div></td> <td class='uk-text-nowrap'><a class='uk-link-reset' href='#'> "
                     + sortedData[i].p_date.toLocaleString() +
@@ -838,196 +824,10 @@
                     "</td> <td class='uk-text-nowrap'>"
                     + sortedData[i].category5 +
                     "</td></tr>");
-
-                var districtName = sortedData[i].category4;
-
-
-                switch (sortedData[i].category4) {
-
-                    // Архангай
-                    case 'Өлзийт сум':
-                        setMarkers(map, districtName, 48.1030253, 102.5606182, sortedData);
-                        break;
-                    case 'Цэнхэр':
-                        setMarkers(map, districtName, 47.4389969, 101.7525358, sortedData);
-                        break;
-                    case 'Өгийнуур сум':
-                        setMarkers(map, districtName, 47.6459635, 102.7645944, sortedData);
-                        break;
-                    case 'Өндөр-Улаан сум':
-                        setMarkers(map, districtName, 48.0402396, 100.5041843, sortedData);
-                        break;
-                    case 'Тариат сум':
-                        setMarkers(map, districtName, 48.155199, 99.8913911, sortedData);
-                        break;
-                    case 'Цэцэрлэг-хот':
-                        setMarkers(map, districtName, 47.4696499, 101.4774341, sortedData);
-                        break;
-                    case 'Цэцэрлэг сум':
-                        setMarkers(map, districtName, 47.4696499, 101.4774341, sortedData);
-                        break;
-
-                    // Баян-Өлгий
-                    case 'Цэнгэл  сум':
-                        setMarkers(map, districtName, 48.937639, 89.136286, sortedData);
-                        break;
-                    case 'Цэнгэл сум':
-                        setMarkers(map, districtName, 48.937639, 89.136286, sortedData);
-                        break;
-                    case 'Өлгий /төв/':
-                        setMarkers(map, districtName, 48.9706758, 89.9678382, sortedData);
-                        break;
-                    case 'Алтанцөгц сум':
-                        setMarkers(map, districtName, 49.0631331, 90.4566047, sortedData);
-                        break;
-
-                    // Булган
-                    case 'Хутаг-Өндөр сум':
-                        setMarkers(map, districtName, 49.3962513, 102.6972588, sortedData);
-                        break;
-                    case 'Дашинчилэн':
-                        setMarkers(map, districtName, 47.8507363, 104.0421247, sortedData);
-                        break;
-
-                    // Дархан-Уул
-                    case 'ДАРХАН СУМ':
-                        setMarkers(map, districtName, 49.4648434, 105.9745919, sortedData);
-                        break;
-                    case 'Орхон сум':
-                        setMarkers(map, districtName, 49.8322595, 106.1329376, sortedData);
-                        break;
-
-                    // Увс
-                    case 'Улаангом /төв/':
-                        setMarkers(map, districtName, 49.9811096, 92.0666733, sortedData);
-                        break;
-                    case 'Хяргас':
-                        setMarkers(map, districtName, 49.6678108, 93.7822875, sortedData);
-                        break;
-                    case 'Цагаанхайрхан':
-                        setMarkers(map, districtName, 49.405244, 94.251751, sortedData);
-                        break;
-                    // Ховд
-                    case 'Булган сум':
-                        setMarkers(map, districtName, 45.7469466, 91.0867701, sortedData);
-                        break;
-                    case 'Чандмань':
-                        setMarkers(map, districtName, 47.833333, 92.65, sortedData);
-                        break;
-
-                    // Баянхонгор
-                    case 'Баянцагаан':
-                        setMarkers(map, districtName, 45.0152528, 98.9366407, sortedData);
-                        break;
-                    case 'Баянлиг сум':
-                        setMarkers(map, districtName, 44.5449374, 100.8393149, sortedData);
-                        break;
-                    case 'Баянхонгор':
-                        setMarkers(map, districtName, 46.177215, 100.7118653, sortedData);
-                        break;
-
-                    // Говь - Алтай
-                    case 'Говь-Алтай сум /төв/':
-                        setMarkers(map, districtName, 45.4511227, 95.8505766, sortedData);
-                        break;
-                    case 'Говь-Алтай':
-                        setMarkers(map, districtName, 45.4511227, 95.8505766, sortedData);
-                        break;
-                    case 'Алтай':
-                        setMarkers(map, districtName, 44.6183507, 94.9195154, sortedData);
-                        break;
-
-                }
             }
         }
-
-        function setMarkers(map, markerTitle, districtLat, districtLng, d_data) {
-
-            var image = 'marker.png';
-            var markerLocation = { lat: districtLat, lng: districtLng };
-            var marker = new google.maps.Marker({
-                position: markerLocation,
-                map: map,
-                title: markerTitle,
-                icon: image
-            });
-            marker.setMap(map);
-
-            marker.addListener('click', function () {
-
-                var m_resource = [];
-
-                for (i = 0; i <= d_data.length; i++) {
-
-                    if (d_data[i] && d_data[i].category4 && d_data[i].category4 == markerTitle) {
-                        m_resource.push(d_data[i]);
-                        // m_resource = d_data[i];
-                        // alert(JSON.stringify(m_resource));
-                    } else {
-                        //alert('no');
-                    }
-
-                }
-
-                if (m_resource != null) {
-                    // alert(JSON.stringify(m_resource));
-                    setMarkerClickHandler(map, marker, markerTitle, m_resource);
-                } else {
-                    alert('wefwef');
-                }
-
-            });
-
-
-        }
-
-        function setMarkerClickHandler(map, marker, markerTitle, markerData) {
-
-            var m_date = "";
-            var m_callphone = "";
-
-            for (i = 0; i < markerData.length; i++) {
-
-                m_date += markerData[i].p_date.toLocaleString() + "<br>";
-                m_callphone += markerData[i].p_callphoneno + "<br>";
-            }
-
-            var contentString = '<div id="content">' +
-                '<h3 id="firstHeading" class="firstHeading">' + markerTitle + '</h3>' +
-                '<div id="bodyContent">' +
-                '<p><b>' + markerTitle + '</b> : Нийт гомдлын тоо - <b> ' + markerData.length + '</b> <br>' +
-
-                '<div class="container-fluid">' +
-                '<div class="row">' +
-                '<div class="col-sm-6">' + '<b>Огноо</b><br>' +
-                m_date
-                +
-                '</div>' +
-                '<div class="col-sm-6">' + '<b>Залгасан дугаар</b><br>' +
-                m_callphone
-                +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-
-                '<p>Тодотгол: ' + markerTitle + ', <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-                'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
-                '</p>' +
-
-                '</div>' +
-                '</div>';
-
-            var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-
-            infowindow.open(map, marker);
-
-        }
-
-
+ 
     </script>
-
 
 </body>
 </html>

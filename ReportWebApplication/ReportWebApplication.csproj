@@ -146,12 +146,12 @@
     <Content Include="css\icons\weather-icons\less\css\variables-time.css" />
     <Content Include="css\icons\weather-icons\less\css\variables-wind-names.css" />
     <Content Include="css\loginStyle.css" />
-    <Content Include="css\menuStyle.css" />
     <Content Include="css\style.min.css" />
     <Content Include="DesignerPage.aspx" />
     <Content Include="img\favicon.png" />
     <Content Include="img\unitel_telecom_logo.png" />
     <Content Include="img\user.png" />
+    <Content Include="jsMap\customizeMap.js" />
     <Content Include="js\area-bayanhongor.js" />
     <Content Include="js\area_arhangay.js" />
     <Content Include="js\area_bayanhongor.js" />
@@ -179,11 +179,7 @@
     <Content Include="js\uikit.min.js" />
     <Content Include="LoginPage.aspx" />
     <Content Include="map-custom-online.js" />
-    <Content Include="map-custom.js" />
-    <Content Include="marker.png" />
-    <Content Include="MenuPage.aspx" />
     <Content Include="style.min.css" />
-    <Content Include="ViewerPage.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -201,13 +197,6 @@
     <Compile Include="LoginPage.aspx.designer.cs">
       <DependentUpon>LoginPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MenuPage.aspx.cs">
-      <DependentUpon>MenuPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MenuPage.aspx.designer.cs">
-      <DependentUpon>MenuPage.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
@@ -222,20 +211,6 @@
     </Compile>
     <Compile Include="Site2.Master.designer.cs">
       <DependentUpon>Site2.Master</DependentUpon>
-    </Compile>
-    <Compile Include="Site3.Master.cs">
-      <DependentUpon>Site3.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Site3.Master.designer.cs">
-      <DependentUpon>Site3.Master</DependentUpon>
-    </Compile>
-    <Compile Include="ViewerPage.aspx.cs">
-      <DependentUpon>ViewerPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ViewerPage.aspx.designer.cs">
-      <DependentUpon>ViewerPage.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -368,7 +343,6 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Site2.Master" />
-    <Content Include="Site3.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

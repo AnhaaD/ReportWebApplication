@@ -24,7 +24,7 @@
 </head>
   <body class="align">
       <div class="form__field center_item">
-      <img src="https://erp.corp.unitel.mn/storage/uploads/process/config-file_1569497080192165.png?v=1"/>
+      <img src="img/logo.png"/>
   </div>
     <div class="grid">
         <div class="temp">
@@ -34,15 +34,14 @@
                   <label for="login__username"><svg class="icon">
                       <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
                     </svg><span class="hidden">Username</span></label>
-                  <input id="login__username" type="text" name="username" class="form__input" placeholder="Хэрэглэгчийн нэр" required>
+                  <input id="login__username" type="text" name="username" value="mungunsukh.p" class="form__input" placeholder="Хэрэглэгчийн нэр" required >
                 </div>
         
                 <div class="form__field">
                   <label for="login__password"><svg class="icon">
                       <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#lock"></use>
                     </svg><span class="hidden">Password</span></label>
-                  <input id="login__password" type="password" name="password" class="form__input" placeholder="Нууц үг"
-                    required>
+                  <input id="login__password" type="password" name="password" value="Unitel7788" class="form__input" placeholder="Нууц үг" required>
                 </div>
         
                 <div class="form__field">
@@ -73,8 +72,9 @@
       </symbol>
     </svg> 
 
-       <script>
+       <script type="text/javascript">
            document.body.style.zoom = "85%";
+
            function loginHandle() {
 
                var check = false;
@@ -85,12 +85,14 @@
                if (username.length !== 0 && password.length !== 0) {
                    $.ajax({
                        type: "POST",
-                       url: 'LoginPage.aspx/checkUserAcc',
+                       url: 'LoginPage.aspx/LoginConn',
                        contentType: "application/json; charset=utf-8",
                        dataType: "json",
                        async: false,
                        data: "{username:'" + username + "', password: '" + password + "'}",
                        success: function (returnValue) {
+                           debugger;
+                          // alert(returnValue.d);
                            if (returnValue.d) {
                                check = true;
                            } else {

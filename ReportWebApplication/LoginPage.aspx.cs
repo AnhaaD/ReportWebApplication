@@ -5,8 +5,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DevExpress.DashboardWeb;
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.DirectoryServices.Protocols;
 using System.Web.Services;
+using System.Net;
 
 
 namespace ReportWebApplication
@@ -19,30 +22,20 @@ namespace ReportWebApplication
 
         }
 
-
         [WebMethod]
-        public static bool checkUserAcc(string username, string password)
+        public static bool LoginConn(string username, string password)
         {
-            bool rvalue = false;
-            string rmsg = string.Empty;
-            try
-            {
-                // 10.21.64.228
-                // 10.21.64.229
-                // 10.21.64.0 / 24
+            bool isValid = false;
 
-                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, "", "LDAP://10.21.64.0/CN=Configuration,DC=corp,DC=unitel,DC=mn"))
-                {
-                    rvalue = pc.ValidateCredentials(username, password);
-                }
-            }
-            catch (Exception ex)
+            using (var pc = new PrincipalContext(ContextType.Domain, "10.21.64.229:389", "CN=Configuration,DC=corp,DC=unitel,DC=mn"))
             {
-                rmsg = ex.Message;
+                isValid = pc.ValidateCredentials(username, password, ContextOptions.SimpleBind);
             }
 
-            return rvalue;
+            return isValid;
         }
+
+
 
 
     }

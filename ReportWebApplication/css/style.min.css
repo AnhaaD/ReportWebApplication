@@ -10383,22 +10383,6 @@ html[dir=ltr] body .p-l-0 {
             margin-left: 65px;
         }
 
-        #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .topbar .top-navbar .navbar-header {
-            width: 65px;
-        }
-
-            #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .topbar .top-navbar .navbar-header .logo-text {
-                display: none;
-            }
-
-            #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .topbar .top-navbar .navbar-header.expand-logo {
-                width: 250px;
-            }
-
-                #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .topbar .top-navbar .navbar-header.expand-logo .logo-text {
-                    display: block;
-                }
-
         #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .left-sidebar .upgrade-btn {
             display: none;
         }
@@ -10425,19 +10409,6 @@ html[dir=ltr] body .p-l-0 {
             width: 65px;
         }
 
-            #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .left-sidebar:hover {
-                width: 250px;
-            }
-
-                #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .left-sidebar:hover .sidebar-nav .has-arrow:after, #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .left-sidebar:hover .sidebar-nav .hide-menu {
-                    display: block;
-                }
-
-                #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .left-sidebar:hover .sidebar-nav .nav-small-cap {
-                    -webkit-box-pack: start;
-                    -ms-flex-pack: start;
-                    justify-content: flex-start;
-                }
 }
 
 @media (max-width:766px) {
